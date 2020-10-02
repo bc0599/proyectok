@@ -1,20 +1,54 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      Blank
+    <ion-title align="center">
+      <h1>Ionic Route App</h1>
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+<ion-content>
+
+  <ion-row  class="ion-margin-top ion-justify-content-center">
+    <ion-col size="8">
+
+  <ion-card>
+    <ion-card-contet>
+      
+  <ion-list class="ios list-ios hydrated" >
+    <ion-list-header class="ios hydrated header-color">
+      <ion-text color="light">
+      <h4>Route List</h4>
+      </ion-text>
+    </ion-list-header>
+
+    <ion-item *ngFor="let route of Routes" class="item-label item ios in-list ion-focusable hydrated">
+      <ion-label class="sc-ion-label-ios-h sc-ion-label-ios-s ios hydrated">
+        <h2>{{route.route_name}}</h2>
+        <h3>{{route.id}}</h3>
+      </ion-label>
+
+      <div class="item-note" item-end>
+        <button ion-button clear [routerLink]="['/modifyroutes/', route._id]">
+          <ion-icon name="create" style="zoom:2.0"></ion-icon>
+        </button>
+        <button ion-button clear (click)="deleteRoute(route, i)">
+          <ion-icon name="trash" style="zoom:2.0"></ion-icon>
+        </button>
+      </div>
+    </ion-item>
+  </ion-list>
+
+  </ion-card-contet>
+</ion-card>
+
+</ion-col>
+</ion-row>
+
+  <!-- fab placed to the bottom start -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" routerLink="/addroutes">
+    <ion-fab-button>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
