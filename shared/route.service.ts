@@ -54,6 +54,13 @@ export class RouteService {
       );
   }
 
+  register(body:any)  {
+    return this.http.post<Route>('http://127.0.0.1:3000/api/register', body, {
+      observe:'body',
+      headers:new HttpHeaders().append('Content-Type', 'application/json')
+    });
+  }
+
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {

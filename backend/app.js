@@ -26,7 +26,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: false
 }));
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:8100', 'http://127.0.0.1:8100'],
+  credentials: true
+}));
 
 // RESTful API root
 app.use('/api', rouRoute)
