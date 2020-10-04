@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const rouRoute = express.Router();
 var User= require('../models/users')
+var passport=require('passport')
 
 let RouteModel = require('../models/routes');
 
@@ -88,6 +89,36 @@ async function addToDB(req,res){
     return res.status(501).json(err)
 
   }
+}
+
+rouRoute.post('/login', function(req,res,next){
+  passport.authenticate('local', function(err, user, info) {
+    if (err) { return res.status(501).json(err); }
+    if (!user) { return res.status(501).json(info); }
+    req.logIn(user, function(err) {
+      if (err) { return res.status(501).json(err); }
+      return res.status(200).json({message:'Login success'})
+    });
+  })(req, res, next);
+});
+
+rouRoute.get('/home', isValidUser, function(req,res,next){
+  return res.status(200).json(req.user);
+});
+
+rouRoute.get('/addroutes', isValidUser, function(req,res,next){
+  return res.status(200).json(req.user);
+});
+
+rouRoute.get('/logout', isValidUser, function(req,res,next){
+
+  req.logout();
+  return res.status(200).json({message: 'Logout success'});
+})
+
+function isValidUser(req,res,next){
+  if(req.isAuthenticated()) next();
+  else return res.status(401).json({message:'Unauthorized Request'})
 }
 
 module.exports = rouRoute;

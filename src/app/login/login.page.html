@@ -1,5 +1,8 @@
 <ion-header>
     <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button></ion-back-button>
+      </ion-buttons>
       <ion-title class="ion-text-center">Log In</ion-title>
     </ion-toolbar>
   </ion-header>
@@ -31,10 +34,10 @@
     </ion-col>
 
         <ion-col size="5">
-          <ion-button [routerLink]="['/home']"  (click)= "login();" type="submit" color="tertiary" expand="block">Sign In</ion-button>
+          <ion-button  (click)= "login();" type="submit" color="tertiary" expand="block">Sign In</ion-button>
         </ion-col>
       </ion-row>
 
-      </ion-content>
+</ion-content>
 
   

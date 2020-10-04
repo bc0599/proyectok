@@ -1,5 +1,8 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
     <ion-title align="center">
       <h1>Ionic Route App</h1>
     </ion-title>
@@ -35,6 +38,7 @@
         <button ion-button clear (click)="deleteRoute(route, i)">
           <ion-icon name="trash" style="zoom:2.0"></ion-icon>
         </button>
+
       </div>
     </ion-item>
   </ion-list>
@@ -47,8 +51,12 @@
 
   <!-- fab placed to the bottom start -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed" routerLink="/addroutes">
-    <ion-fab-button>
+    <ion-fab-button (click)="addRoute();">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
+
   </ion-fab>
 
+  <ion-fab vertical="bottom" horizontal="start" slot="fixed" routerLink="/login">
+   <ion-button  (click)= "logout()" shape="round" fill="outline">Log Out</ion-button>
+</ion-fab>

@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
+import { RouteService } from 'shared/route.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +16,7 @@ export class LoginPage implements OnInit {
     password: new FormControl(null,Validators.required)
   });
 
-  constructor() { }
+  constructor(private alertC: AlertController, private router: Router, private user: RouteService) { }
 
   ngOnInit() {
   }
@@ -25,8 +28,28 @@ export class LoginPage implements OnInit {
 
     }
 
-    console.log(JSON.stringify(this.loginForm.value));
+    //console.log(JSON.stringify(this.loginForm.value));
+    this.user.login(JSON.stringify(this.loginForm.value)).subscribe(
+      data=>{ console.log(data);
+        this.router.navigate(['/home'])
+      },
+      error=>{console.error(error)
+        this.showAlert();
+      }
+    )
+  }
 
+  async showAlert(){
+    await this.alertC.create({
+      header: "Incorrect data",
+      message: "Your password or email are incorrect.",
+      buttons: [{
+        text: "Continue", handler: (res) =>{
+          console.log(res)
+        }
+      }
+      ]
+  }).then(res=> res.present());
   }
 
 }
