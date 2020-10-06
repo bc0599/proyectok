@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { RouteService } from '../../../shared/route.service';
+import {cloneDeep} from 'lodash';
 
 @Component({
   selector: 'app-home',
@@ -10,30 +11,41 @@ import { RouteService } from '../../../shared/route.service';
 
 export class HomePage implements OnInit {
   Routes: any = [];
+  response: any = [];
+  routesArray:any=[];
 
   constructor(
     private routeService: RouteService,
     private router: Router
   ) {
     this.routeService.home().subscribe(
-      data=> console.log(data),
+      data=> {console.log(data);
+        sessionStorage.setItem("loggedUserInfo", JSON.stringify(data));
+      },
       error=> this.router.navigate(['/login'])
     )
+
+
   }
-
-  ngOnInit() { }
-
+  ngOnInit(){}
+  
   ionViewDidEnter() {
-    this.routeService.getRouteList().subscribe((res) => {
-      console.log(res)
-      this.Routes = res;
+    let item = JSON.parse(sessionStorage.getItem("loggedUserInfo"));
+    this.response=cloneDeep(item)
+    this.routeService.getRouteList(this.response.username).subscribe((res)=>{
+      this.routesArray=cloneDeep(res)
+      this.Routes=this.routesArray.routes
     })
   }
 
-  deleteRoute(Route, i) {
+  deleteRoute(route, i) {
     if (window.confirm('Do you want to delete route?')) {
-      this.routeService.deleteRoute(Route._id)
-        .subscribe(() => {
+
+      this.routeService.deleteRoute(this.response.username, route.id )
+        .subscribe((res) => {
+          console.log(res)
+          console.log(this.response.username)
+          console.log(route.id)
           this.Routes.splice(i, 1);
           console.log('Route deleted!')
         }

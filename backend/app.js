@@ -8,8 +8,8 @@ let express = require('express'),
 
 // Connecting mongoDB
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb+srv://gatitos999:gatitos999@cluster0.mhyt0.mongodb.net/cluster0?retryWrites=true&w=majority', {
-}).then(() => {
+mongoose.connect('mongodb+srv://gatitos999:gatitos999@cluster0.mhyt0.mongodb.net/cluster0?retryWrites=true&w=majority',
+{ useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
   console.log('Database connected sucessfully ')
 },
   error => {
@@ -26,13 +26,24 @@ const MongoStore = require('connect-mongo')(session);
 
 const app = express();
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers");
+  next();
+});
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+
 app.use(session({
   name: 'myname.sid',
   resave:false,
   saveUninitialized:false,
   secret:'secret',
   cookie:{
-    maxAge:36000000,
+    maxAge:3600000,
     httpOnly:false,
     secure:false
   },
@@ -43,11 +54,6 @@ require('./passport-config')
 
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: false
-}));
 
 app.use(cors({
   origin: ['http://localhost:8100', 'http://127.0.0.1:8100'],
@@ -63,6 +69,8 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log('PORT Connected on: ' + port)
 })
+
+var createError = require('createerror');
 
 // Find 404 and hand over to error handler
 app.use((req, res, next) => {

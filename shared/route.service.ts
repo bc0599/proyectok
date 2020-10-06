@@ -15,23 +15,23 @@ export class RouteService {
 
   constructor(private http: HttpClient) { }
 
-  addRoute(route: Route): Observable<any> {
-    return this.http.post<Route>('http://127.0.0.1:3000/api/create-route', route, this.httpOptions)
+  addRoute(id, route: Route): Observable<any> {
+    return this.http.post<Route>('http://localhost:3000/api/create-route/'+ id, route, this.httpOptions)
       .pipe(
         catchError(this.handleError<Route>('Add Route'))
       );
   }
 
   getRoute(id): Observable<Route[]> {
-    return this.http.get<Route[]>('http://127.0.0.1:3000/api/get-route/' + id)
+    return this.http.get<Route[]>('http://localhost:3000/api/get-route/'+ id, this.httpOptions)
       .pipe(
         tap(_ => console.log(`Route fetched: ${id}`)),
         catchError(this.handleError<Route[]>(`Get Route id=${id}`))
       );
   }
 
-  getRouteList(): Observable<Route[]> {
-    return this.http.get<Route[]>('http://127.0.0.1:3000/api')
+  getRouteList(username): Observable<Route[]> {
+    return this.http.get<Route[]>('http://localhost:3000/api/get-all/'+username,this.httpOptions)
       .pipe(
         tap(Routes => console.log('Routes fetched!')),
         catchError(this.handleError<Route[]>('Get Routes', []))
@@ -39,15 +39,15 @@ export class RouteService {
   }
 
   updateRoute(id, route: Route): Observable<any> {
-    return this.http.put('http://127.0.0.1:3000/api/update-route/' + id, route, this.httpOptions)
+    return this.http.post('http://localhost:3000/api/update-route/' + id +'/'+ route, this.httpOptions)
       .pipe(
         tap(_ => console.log(`Route updated: ${id}`)),
         catchError(this.handleError<Route[]>('Update Route'))
       );
   }
 
-  deleteRoute(id): Observable<Route[]> {
-    return this.http.delete<Route[]>('http://127.0.0.1:3000/api/delete-route/' + id, this.httpOptions)
+  deleteRoute(username, id): Observable<Route[]> {
+    return this.http.post<Route[]>('http://localhost:3000/api/delete-route/' + username +'/'+  id, this.httpOptions)
       .pipe(
         tap(_ => console.log(`Route deleted: ${id}`)),
         catchError(this.handleError<Route[]>('Delete Route'))
@@ -55,14 +55,14 @@ export class RouteService {
   }
 
   register(body:any)  {
-    return this.http.post('http://127.0.0.1:3000/api/register', body, {
+    return this.http.post('http://localhost:3000/api/register', body, {
       observe:'body',
       headers:new HttpHeaders().append('Content-Type', 'application/json')
     });
   }
 
   login(body:any)  {
-    return this.http.post('http://127.0.0.1:3000/api/login', body, {
+    return this.http.post('http://localhost:3000/api/login', body, {
       observe:'body',
       withCredentials:true,
       headers:new HttpHeaders().append('Content-Type', 'application/json')
@@ -70,7 +70,7 @@ export class RouteService {
   }
 
   home(){
-    return this.http.get('http://127.0.0.1:3000/api/home', {
+    return this.http.get('http://localhost:3000/api/home', {
       observe:'body',
       withCredentials:true,
       headers:new HttpHeaders().append('Content-Type', 'application/json')
@@ -79,7 +79,7 @@ export class RouteService {
   }
 
   addRoutes(){
-    return this.http.get('http://127.0.0.1:3000/api/addroutes', {
+    return this.http.get('http://localhost:3000/api/addroutes', {
       observe:'body',
       withCredentials:true,
       headers:new HttpHeaders().append('Content-Type', 'application/json')
@@ -88,7 +88,7 @@ export class RouteService {
   }
 
   logout(){
-    return this.http.get('http://127.0.0.1:3000/api/logout', {
+    return this.http.get('http://localhost:3000/api/logout', {
       observe:'body',
       withCredentials:true,
       headers:new HttpHeaders().append('Content-Type', 'application/json')

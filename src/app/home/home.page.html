@@ -32,7 +32,7 @@
       </ion-label>
 
       <div class="item-note" item-end>
-        <button ion-button clear [routerLink]="['/modifyroutes/', route._id]">
+        <button ion-button clear [routerLink]="['/modifyroutes/', route.id]">
           <ion-icon name="create" style="zoom:2.0"></ion-icon>
         </button>
         <button ion-button clear (click)="deleteRoute(route, i)">

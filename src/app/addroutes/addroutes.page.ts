@@ -2,6 +2,7 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import { RouteService } from '../../../shared/route.service';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder } from "@angular/forms";
+import {cloneDeep} from 'lodash';
 
 @Component({
   selector: 'app-addroutes',
@@ -11,6 +12,8 @@ import { FormGroup, FormBuilder } from "@angular/forms";
 export class AddroutesPage implements OnInit {
 
   routeForm: FormGroup;
+  id;
+  loggedUser:any=[];
 
   constructor(
     private songAPI: RouteService,
@@ -25,13 +28,18 @@ export class AddroutesPage implements OnInit {
   }
 
   ngOnInit() {
+    
+    let loggedUser1 = JSON.parse(sessionStorage.getItem("loggedUserInfo"));
+    this.loggedUser=cloneDeep(loggedUser1)
+    this.id=cloneDeep(this.loggedUser._id)
+
   }
 
   onFormSubmit() {
     if (!this.routeForm.valid) {
       return false;
     } else {
-      this.songAPI.addRoute(this.routeForm.value)
+      this.songAPI.addRoute(this.id, this.routeForm.value)
         .subscribe((res) => {
           this.zone.run(() => {
             console.log(res)

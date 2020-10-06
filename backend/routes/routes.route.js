@@ -1,4 +1,4 @@
-const { Router } = require('express');
+const { Router, query } = require('express');
 const express = require('express');
 const app = express();
 const rouRoute = express.Router();
@@ -8,44 +8,51 @@ var passport=require('passport')
 let RouteModel = require('../models/routes');
 
 // Add route
-rouRoute.route('/create-route').post((req, res, next) => {
-  RouteModel.create(req.body, (error, data) => {
-    if (error) {
-      return next(error)
-    } else {
-      res.json(data)
+rouRoute.route('/create-route/:id').post((req, res, next) => {
+  User.findOneAndUpdate(
+    { _id: req.params.id },
+    {$addToSet:{ routes: req.body }},
+    {new:true, upsert: true, rawResult: true, useFindAndModify:false},
+    function(err, data) {
+      if (err) {
+        return next(err)
+      } else {
+        res.json(data);
+      }
     }
-  })
+  );
 });
 
 // Get all routes
-rouRoute.route('/').get((req, res) => {
-  RouteModel.find((error, data) => {
-    if (error) {
-      return next(error)
+rouRoute.route('/get-all/:username').get((req, res,next) => {
+  var query= User.findOne({username:req.params.username});
+  query.select('routes');
+  query.exec(function (err, data) {
+    if (err) {
+      return next(err)
     } else {
-      res.json(data)
+      res.json(data);
     }
   })
 })
 
 // Get single route
-rouRoute.route('/get-route/:id').get((req, res) => {
-  RouteModel.findById(req.params.id, (error, data) => {
-    if (error) {
-      return next(error)
-    } else {
-      res.json(data)
-    }
-  })
+rouRoute.route('/get-route/:id').get((req, res,next) => {
+  User.find( {'routes.id':req.params.id},
+    function(err, data) {
+      if (err) {
+        return next(err)
+      } else {
+        res.json(data);
+      }
+    })
 })
 
 
 // Update route
-rouRoute.route('/update-route/:id').put((req, res, next) => {
-  RouteModel.findByIdAndUpdate(req.params.id, {
-    $set: req.body
-  }, (error, data) => {
+rouRoute.route('/update-route/:username/:route_name').post((req, res, next) => {
+  RouteModel.findOneAndUpdate( req.params.username, { $set: { "routes": req.body } },{ safe: true, upsert: false, useFindAndModify:false}, 
+  function (error, data) {
     if (error) {
       return next(error);
       console.log(error)
@@ -57,16 +64,16 @@ rouRoute.route('/update-route/:id').put((req, res, next) => {
 })
 
 // Delete route
-rouRoute.route('/delete-route/:id').delete((req, res, next) => {
-  RouteModel.findByIdAndRemove(req.params.id, (error, data) => {
-    if (error) {
-      return next(error);
-    } else {
-      res.status(200).json({
-        msg: data
-      })
+rouRoute.route('/delete-route/:username/:id').post((req, res, next) => {
+  User.findOneAndUpdate( req.params.username, { $pull: { "routes": { id: req.params.id } } }, { safe: true, upsert: true, useFindAndModify:false},
+    function(err, data) {
+      if (err) {
+        return next(err)
+      } else {
+        res.json(data);
+      }
     }
-  })
+  );
 })
 
 rouRoute.post('/register', function(req,res,next){
