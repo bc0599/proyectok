@@ -44,6 +44,8 @@ export class RegisterPage implements OnInit {
       error=> console.log(error)
     
       )
+
+      
   }
 
 }
