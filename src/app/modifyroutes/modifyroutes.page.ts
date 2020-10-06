@@ -67,13 +67,21 @@ export class ModifyroutesPage implements OnInit {
     if (!this.updateRouteForm.valid) {
       return false;
     } else {
-      this.routeService.updateRoute(this.response.username, this.updateRouteForm.value)
+      this.routeService.updateRoute(this.response.username,this.inputValueId, this.inputValue)
         .subscribe((res) => {
+
+          console.log(this.a)
+
+          console.log(this.id)
+
           console.log(this.inputValue)
+          
           console.log(this.inputValueId)
-          console.log('algo')
+          
           console.log(res)
+          
           this.updateRouteForm.reset();
+          
           this.router.navigate(['/home']);
         })
     }

@@ -50,8 +50,8 @@ rouRoute.route('/get-route/:id').get((req, res,next) => {
 
 
 // Update route
-rouRoute.route('/update-route/:username/:route_name').post((req, res, next) => {
-  RouteModel.findOneAndUpdate( req.params.username, { $set: { "routes": req.body } },{ safe: true, upsert: false, useFindAndModify:false}, 
+rouRoute.route('/update-route/:username/:id/:route_name').post((req, res, next) => {
+  User.findOneAndUpdate({ 'username': req.params.username, 'routes.id': req.params.id },{ $set:{ 'routes.$.route_name': req.params.route_name}}, 
   function (error, data) {
     if (error) {
       return next(error);

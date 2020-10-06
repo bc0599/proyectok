@@ -38,8 +38,8 @@ export class RouteService {
       );
   }
 
-  updateRoute(id, route: Route): Observable<any> {
-    return this.http.post('http://localhost:3000/api/update-route/' + id +'/'+ route, this.httpOptions)
+  updateRoute(username, id, route_name): Observable<any> {
+    return this.http.post('http://localhost:3000/api/update-route/' + username +'/'+ id +'/'+ route_name, this.httpOptions)
       .pipe(
         tap(_ => console.log(`Route updated: ${id}`)),
         catchError(this.handleError<Route[]>('Update Route'))
