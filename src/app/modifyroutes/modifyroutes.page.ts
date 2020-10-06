@@ -29,17 +29,26 @@ export class ModifyroutesPage implements OnInit {
   }
 
   ngOnInit() {
+    
     let item = JSON.parse(sessionStorage.getItem("loggedUserInfo"));
+    
     this.response=cloneDeep(item)
+    
     this.getRouteData(this.id);
+    
     this.updateRouteForm = this.fb.group({
+    
       route_name: [''],
+    
       id: ['']
+    
     })
+  
   }
 
   getRouteData(routeId) {
     console.log(this.response.username)
+    
     this.routeService.getRoute(routeId).subscribe(res => {
 
       console.log(routeId)
@@ -49,15 +58,20 @@ export class ModifyroutesPage implements OnInit {
       this.routes=cloneDeep(res)
       
       console.log(this.routes)
+    
       console.log(this.routes[0].routes)
 
       this.a= this.routes[0].routes.find(x => x.id == routeId).route_name;
+    
       console.log(this.a)
 
       
     this.updateRouteForm.setValue({
+    
       route_name: this.a,
+    
       id: this.id
+    
     });
 
     });
@@ -65,10 +79,14 @@ export class ModifyroutesPage implements OnInit {
 
   updateForm() {
     if (!this.updateRouteForm.valid) {
+    
       return false;
+    
     } else {
+    
       this.routeService.updateRoute(this.response.username,this.inputValueId, this.inputValue)
-        .subscribe((res) => {
+    
+      .subscribe((res) => {
 
           console.log(this.a)
 

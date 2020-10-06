@@ -12,7 +12,9 @@ import {cloneDeep} from 'lodash';
 export class AddroutesPage implements OnInit {
 
   routeForm: FormGroup;
+  
   id;
+  
   loggedUser:any=[];
 
   constructor(
@@ -21,32 +23,49 @@ export class AddroutesPage implements OnInit {
     public fb: FormBuilder,
     private zone: NgZone
   ) {
+  
     this.routeForm = this.fb.group({
+  
       route_name: [''],
+  
       id: ['']
+  
     })
   }
 
   ngOnInit() {
     
     let loggedUser1 = JSON.parse(sessionStorage.getItem("loggedUserInfo"));
+  
     this.loggedUser=cloneDeep(loggedUser1)
+  
     this.id=cloneDeep(this.loggedUser._id)
 
   }
 
   onFormSubmit() {
+  
     if (!this.routeForm.valid) {
+  
       return false;
+  
     } else {
+  
       this.songAPI.addRoute(this.id, this.routeForm.value)
-        .subscribe((res) => {
-          this.zone.run(() => {
-            console.log(res)
-            this.routeForm.reset();
-            this.router.navigate(['/home']);
-          })
-        });
+  
+      .subscribe((res) => {
+  
+        this.zone.run(() => {
+  
+          console.log(res)
+  
+          this.routeForm.reset();
+  
+          this.router.navigate(['/home']);
+  
+        })
+  
+      });
     }
   }
 }

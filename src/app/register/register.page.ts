@@ -13,8 +13,11 @@ export class RegisterPage implements OnInit {
   registerForm: FormGroup= new FormGroup({
 
     email: new FormControl(null,[Validators.email, Validators.required]),
+    
     username: new FormControl(null, Validators.required),
+    
     password: new FormControl(null, Validators.required),
+    
     cpass: new FormControl(null, Validators.required)
 
   })
@@ -25,6 +28,7 @@ export class RegisterPage implements OnInit {
   }
 
   register(){
+    
     if(!this.registerForm.valid || (this.registerForm.controls.password.value != this.registerForm.controls.cpass.value)){
 
       console.log('invalid form'); return;
@@ -32,11 +36,14 @@ export class RegisterPage implements OnInit {
     }
 
     this.routeService.register(JSON.stringify(this.registerForm.value))
+    
     .subscribe(
+    
       data=> {console.log(data); this.router.navigate(['/login'])},
+    
       error=> console.log(error)
-    )
-    //console.log(JSON.stringify(this.registerForm.value));
+    
+      )
   }
 
 }

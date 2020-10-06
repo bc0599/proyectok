@@ -6,29 +6,40 @@ const routeSchema = new mongoose.Schema({
 
 
     route_name: {
+        
         type: String
-      },
-      id: {
+      
+    },
+    
+    id: {
+    
         type: Number
-      }
+    
+    }
 
 
 })
 
 var schema= new Schema({
+    
     email: {type:String, require:true},
+    
     username: {type:String, require:true},
+    
     password: {type:String, require:true},
+    
     creation_dt:{type:Date, require:true},
 
     routes: [routeSchema]
 });
 
 schema.statics.hashPassword=function hashPassword(password){
+    
     return bcrypt.hashSync(password,10);
 }
 
 schema.methods.isValid=function(hashedpassword){
+    
     return bcrypt.compareSync(hashedpassword, this.password);
 
 }
